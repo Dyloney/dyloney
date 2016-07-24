@@ -12,16 +12,36 @@ class TreeViewButton(Button, TreeViewNode):
     pass
 
 class fooditem():
-    def __init__(self, item):
-	self.categ = item[0]
-	self.name = item[1]
+    def __init__(self, categ, item):
+	self.categ = categ
+	self.name = item
 
 foodlist = []
-with open('data/testdata.txt') as f:
-    for i in f:
-	i = i.strip('\n')
-	datum = tuple(map(str, i.split(',')))
-	foodlist.append(fooditem(datum))
+foodlist.append(fooditem('Fruit', 'apple'))
+foodlist.append(fooditem('Vegetable', 'carrots'))
+foodlist.append(fooditem('Meat', 'Pork Chops'))
+foodlist.append(fooditem('Bread', 'rolls'))
+foodlist.append(fooditem('Fruit', 'apple'))
+foodlist.append(fooditem('Vegetable', 'carrots'))
+foodlist.append(fooditem('Meat', 'Pork Chops'))
+foodlist.append(fooditem('Bread', 'rolls'))
+foodlist.append(fooditem('Fruit', 'apple'))
+foodlist.append(fooditem('Vegetable', 'carrots'))
+foodlist.append(fooditem('Meat', 'Pork Chops'))
+foodlist.append(fooditem('Bread', 'rolls'))
+foodlist.append(fooditem('Fruit', 'apple'))
+foodlist.append(fooditem('Vegetable', 'carrots'))
+foodlist.append(fooditem('Meat', 'Pork Chops'))
+foodlist.append(fooditem('Bread', 'rolls'))
+foodlist.append(fooditem('Fruit', 'apple'))
+foodlist.append(fooditem('Vegetable', 'carrots'))
+foodlist.append(fooditem('Meat', 'Pork Chops'))
+foodlist.append(fooditem('Bread', 'rolls'))
+foodlist.append(fooditem('Fruit', 'apple'))
+foodlist.append(fooditem('Vegetable', 'carrots'))
+foodlist.append(fooditem('Meat', 'Pork Chops'))
+foodlist.append(fooditem('Bread', 'rolls'))
+
 
 usedcat = {}
 
