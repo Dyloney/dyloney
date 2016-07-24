@@ -1,5 +1,5 @@
 from kivy.uix.scrollview import ScrollView
-from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.floatlayout import FloatLayout
 from kivy.core.window import Window
 from kivy.uix.widget import Widget
 from kivy.uix.treeview import TreeView, TreeViewNode
@@ -53,17 +53,24 @@ usedcat = {}
 class POSFMApp(App):
 
     def build(self):
-	layout = BoxLayout(orientation='vertical')
+	layout = FloatLayout()
         self.tv = TreeView(root_options=dict(text='Tree One'), hide_root=True, indent_level=0, indent_start=0)
         self.tv.size_hint = 1, None
         self.tv.bind(minimum_height = self.tv.setter('height'))
         self.populate_tree_view(self.tv)
 
-	self.menu = Button(text = 'Menu', size_hint =(1,.3))
+	self.camera = Button(text = 'Camera', size_hint =(1/3.,.23),
+				background_color=[1,0,0,.6], pos_hint={'x':0,'y':0})
+	self.add = Button(text = 'Add', size_hint =(1/3.,.23),
+			background_color=[1,0,0,.6], pos_hint={'x':1/3.,'y':0})
+	self.sort = Button(text = 'Sort', size_hint =(1/3.,.23), 
+			   background_color=[1,0,0,.6], pos_hint={'x':2/3.,'y':0})
         root = ScrollView(pos = (0, 0))
         root.add_widget(self.tv)
 	layout.add_widget(root)
-	layout.add_widget(self.menu)
+	layout.add_widget(self.camera)
+	layout.add_widget(self.add)
+	layout.add_widget(self.sort)
 	#root.add_widget(self.menu)
         return layout
 
