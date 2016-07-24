@@ -1,0 +1,29 @@
+Fruit, apple
+Vegetable, carrots
+Meat, Pork chops
+Wheat/Grains, rolls
+Fruit, pears
+Vegetable, cucumber
+Meat, bacon
+Wheat/Grains, wheat
+Fruit, orange
+Vegetable, celery
+Meat, beef
+Wheat/Grains, white
+Fruit, cantelope
+Vegetable, tomato
+Meat, hot dogs
+Wheat/Grains, cake
+Fruit, banana
+Vegetable, onion
+Meat, hamburger
+Wheat/Grains, hotdog buns
+Fruit, lemon
+Vegetable, green beans
+Meat, ribs
+Wheat/Grains, french rolls
+Miscellaneous, batteries
+Dairy, milk
+Dairy, eggs
+Frozen Goods, tv dinners
+Frozen Goods, hot Pockets
