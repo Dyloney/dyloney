@@ -1,4 +1,8 @@
 import sqlite3
+import time
+
+class ItemNotFoundException(Exception):
+    pass
 
 class Data():
     def __init__(self):
@@ -19,7 +23,7 @@ class Data():
                     (item_id integer, date text)''')
 
        c.execute('''CREATE TABLE if not exists deleted_items
-                    (item_id integer, date text)''')
+                    (item_id integer, date_inserted text, date_deleted text)''')
 
        c.execute('''CREATE TABLE if not exists item_categories
                     (item_id integer, category text)''')
@@ -63,9 +67,74 @@ class Data():
         c.execute('INSERT INTO items(item_name) VALUES (?)', (name, ))
         item_id = c.lastrowid
 
-        c.execute('INSERT INTO current_items VALUES (?, ?)', (item_id, name))
+        date = (time.strftime("%d/%m/%Y"))
+
+        c.execute('INSERT INTO current_items VALUES (?, ?)', (item_id, date))
         c.connection.commit()
         return item_id
 
-        
-        
+    def assign_category(self, item_id, category):
+        '''
+        Assign a category to an item
+        '''
+
+        c = self.c
+        c.execute('INSERT INTO item_categories VALUES (?, ?)', (item_id, category))
+        c.connection.commit()
+
+    def delete_item(self, item_id):
+        '''
+        Remove item_id from the current_items table.
+        Add item_id to the deleted_items table.
+        '''
+
+        c = self.c
+        date_deleted = (time.strftime("%d/%m/%Y"))
+        c.execute('SELECT date FROM current_items WHERE item_id = ?', (item_id, ))
+        date_inserted = str(c.fetchone()[0])
+        c.execute('DELETE FROM current_items WHERE item_id = ?', (item_id, ))
+        c.execute('INSERT INTO deleted_items VALUES (?, ?, ?)', (item_id, date_inserted, date_deleted))
+        c.connection.commit()
+
+    def get_current_item_ids(self):
+        '''
+        Return all current item_ids
+        '''
+        c = self.c
+        item_ids = [row[0] for row in c.execute('SELECT item_id from current_items')]
+        return item_ids
+
+    def get_item_name(self, item_id):
+        '''
+        Return name of item with the specified item_id
+        '''
+
+        c = self.c
+        c.execute('SELECT item_name FROM items WHERE item_id = ?', (item_id, ))
+        name = str(c.fetchone()[0])
+        return name
+
+    def get_item_category(self, item_id):
+        '''
+        Return the category of item with the specified item_id
+        '''
+
+        c = self.c
+        c.execute('SELECT category from item_categories WHERE item_id = ?', (item_id, ))
+        try:
+            category = str(c.fetchone()[0])
+            return category
+        except TypeError:
+            raise ItemNotFoundException('Category not defined')
+
+    def get_item_date_inserted(self, item_id):
+        c = self.c
+        c.execute('SELECT date FROM current_items WHERE item_id = ?', (item_id, ))
+        date = str(c.fetchone()[0])
+        if date is None: # check the deleted items
+            c.execute('SELECT date_inserted FROM deleted_items WHERE item_id = ?', (item_id, ))
+            date = str(c.fetchone()[0])
+        if date is not None:
+            return date
+        else:
+            raise ItemNotFoundException('No such item')
