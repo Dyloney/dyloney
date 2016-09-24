@@ -24,6 +24,8 @@ class Data():
        c.execute('''CREATE TABLE if not exists item_categories
                     (item_id integer, category text)''')
 
+       c.connection.commit()
+
     def populate_categories(self):
         '''
         Eventually query the server. Rebuild this list every
@@ -47,5 +49,23 @@ class Data():
                      (category text)''')
 
         c.executemany('INSERT INTO categories VALUES (?)', categories)
+        c.connection.commit()
 
-    def 
+    def insert_item(self, name):
+        '''
+        Insert an item into the database.
+        Add the item_id to the current_items table.
+        Does not assign a category.
+        Returns item_id.
+        '''
+
+        c = self.c
+        c.execute('INSERT INTO items(item_name) VALUES (?)', (name, ))
+        item_id = c.lastrowid
+
+        c.execute('INSERT INTO current_items VALUES (?, ?)', (item_id, name))
+        c.connection.commit()
+        return item_id
+
+        
+        
