@@ -13,7 +13,7 @@ class Data():
        conn = self.conn
 
        c.execute('''CREATE TABLE if not exists items
-                    (item_id integer, item_name text)''')
+                    (item_id integer primary key, item_name text)''')
 
        c.execute('''CREATE TABLE if not exists current_items
                     (item_id integer, date text)''')
@@ -48,4 +48,4 @@ class Data():
 
         c.executemany('INSERT INTO categories VALUES (?)', categories)
 
-    
+    def 
