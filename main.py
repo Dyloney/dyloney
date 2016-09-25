@@ -7,45 +7,14 @@ from kivy.uix.treeview import TreeViewLabel
 from kivy.app import App
 from kivy.properties import ObjectProperty, StringProperty
 from kivy.uix.button import Button
+from kivy.uix.popup import Popup
+from kivy.uix.label import Label
+
+from data import DataStore
+from items import Item, NewItem
 
 class TreeViewButton(Button, TreeViewNode):
     pass
-
-class fooditem():
-    def __init__(self, categ, item):
-	self.categ = categ
-	self.name = item
-
-foodlist = []
-foodlist.append(fooditem('Fruit', 'apple'))
-foodlist.append(fooditem('Vegetable', 'carrots'))
-foodlist.append(fooditem('Meat', 'Pork chops'))
-foodlist.append(fooditem('Wheat/Grains', 'rolls'))
-foodlist.append(fooditem('Fruit', 'pears'))
-foodlist.append(fooditem('Vegetable', 'cucumber'))
-foodlist.append(fooditem('Meat', 'bacon'))
-foodlist.append(fooditem('Wheat/Grains', 'wheat'))
-foodlist.append(fooditem('Fruit', 'orange'))
-foodlist.append(fooditem('Vegetable', 'celery'))
-foodlist.append(fooditem('Meat', 'beef'))
-foodlist.append(fooditem('Wheat/Grains', 'white'))
-foodlist.append(fooditem('Fruit', 'cantelope'))
-foodlist.append(fooditem('Vegetable', 'tomato'))
-foodlist.append(fooditem('Meat', 'hot dogs'))
-foodlist.append(fooditem('Wheat/Grains', 'cake'))
-foodlist.append(fooditem('Fruit', 'banana'))
-foodlist.append(fooditem('Vegetable', 'onion'))
-foodlist.append(fooditem('Meat', 'hamburger'))
-foodlist.append(fooditem('Wheat/Grains', 'hotdog buns'))
-foodlist.append(fooditem('Fruit', 'lemon'))
-foodlist.append(fooditem('Vegetable', 'green beans'))
-foodlist.append(fooditem('Meat', 'ribs'))
-foodlist.append(fooditem('Wheat/Grains', 'french rolls'))
-foodlist.append(fooditem('Miscellaneous', 'batteries'))
-foodlist.append(fooditem('Dairy', 'milk'))
-foodlist.append(fooditem('Dairy', 'eggs'))
-foodlist.append(fooditem('Frozen Goods', 'tv dinners'))
-foodlist.append(fooditem('Frozen Goods', 'hot Pockets'))
 
 
 usedcat = {}
@@ -55,6 +24,8 @@ class POSFMApp(App):
 
     def build(self):
 	layout = FloatLayout()
+        self.DataStore = DataStore()
+        
         self.tv = TreeView(root_options=dict(text='Tree One'), hide_root=True, indent_level=0, indent_start=0)
         self.tv.size_hint = 1, None
         self.tv.bind(minimum_height = self.tv.setter('height'))
@@ -72,19 +43,34 @@ class POSFMApp(App):
 	layout.add_widget(self.camera)
 	layout.add_widget(self.add)
 	layout.add_widget(self.sort)
+
+        self.add.bind(on_press=self.add_clicked)
+        
         return layout
+
+    def populate_current_items(self):
+        current_items = self.DataStore.get_current_item_ids()
+
+        self.current_items_dict = {}
+        for id in current_items:
+            item = Item(self.DataStore, id)
+            item.get_item_name()
+            item.get_item_category()
+            self.current_items_dict[id] = item
 
     def populate_tree_view(self, tv):
 
-        for i, item in enumerate(foodlist):
-	    if item.categ not in usedcat.keys():
-	        catbutton = TreeViewButton(text='%s' % item.categ, font_size = '50sp',
+        self.populate_current_items()
+            
+        for i, item in self.current_items_dict.iteritems():
+	    if item.category not in usedcat.keys():
+	        catbutton = TreeViewButton(text='%s' % item.category, font_size = '50sp',
 				size = (100, 450), background_color=[1,1,0,1])
 	        catbutton.bind(on_press=self.cat_clicked)
                 g = self.tv.add_node(catbutton)
-		usedcat[item.categ] = g
+		usedcat[item.category] = g
 	    else:
-		g = usedcat[item.categ]
+		g = usedcat[item.category]
 	    itembutton = TreeViewButton(text='%s' % item.name, font_size = '30sp',
 				size = (100,150), background_color=[0,1,1,1])
 	    itembutton.outline_height = 10
@@ -92,6 +78,15 @@ class POSFMApp(App):
 
     def cat_clicked(self, button):
         self.tv.toggle_node(button)
+
+    def add_clicked(self, button):
+        popup = Popup(title='Test popup',
+                      content=Label(text='Hello world'),
+                      size_hint=(None, None), size=(400, 400))
+
+        popup.open()
+
+
 
 if __name__ == '__main__':
     POSFMApp().run()

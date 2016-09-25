@@ -1,10 +1,8 @@
 import sqlite3
 import time
+from errors import *
 
-class ItemNotFoundException(Exception):
-    pass
-
-class Data():
+class DataStore():
     def __init__(self):
         self.conn = sqlite3.connect('data.db')
         self.c = self.conn.cursor()
@@ -40,8 +38,7 @@ class Data():
             ('Dairy',),
             ('Fish',),
             ('Meat',),
-            ('Fruit',),
-            ('Vegetable',),
+            ('Produce',),
             ('Frozen',),
             ('Grains',),
             ('Sweets',)
