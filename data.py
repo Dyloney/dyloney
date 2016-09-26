@@ -1,10 +1,12 @@
 import sqlite3
 import time
+import os
 from errors import *
 
 class DataStore():
     def __init__(self):
-        self.conn = sqlite3.connect('data.db')
+        self.conn =  sqlite3.connect(os.path.expanduser('~/Documents/data.db'))
+        #self.conn = sqlite3.connect('data.db')
         self.c = self.conn.cursor()
 
         self.setup_tables()
