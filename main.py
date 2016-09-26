@@ -11,7 +11,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
-from kivy.uix.dropdown import DropDown
+from kivy.uix.spinner import Spinner
 
 from data import DataStore
 from items import Item, NewItem
@@ -69,11 +69,11 @@ class POSFMApp(App):
         current_items = self.DataStore.get_current_item_ids()
 
         self.current_items_dict = {}
-        for id in current_items:
-            item = Item(self.DataStore, id)
+        for item_id in current_items:
+            item = Item(self.DataStore, item_id)
             item.get_item_name()
             item.get_item_category()
-            self.current_items_dict[id] = item
+            self.current_items_dict[item_id] = item
 
     def populate_tree_view(self, tv):
 
