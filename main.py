@@ -9,6 +9,9 @@ from kivy.properties import ObjectProperty, StringProperty
 from kivy.uix.button import Button
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.textinput import TextInput
+from kivy.uix.dropdown import DropDown
 
 from data import DataStore
 from items import Item, NewItem
@@ -17,6 +20,20 @@ class TreeViewButton(Button, TreeViewNode):
     pass
 
 
+class AddItemLayout(BoxLayout):
+    def __init__(self, ds):
+        super(AddItemLayout, self).__init__(orientation='vertical')
+        self.name_input = TextInput()
+        self.add_widget(self.name_input)
+        self.submit = Button(text='Submit')
+        self.add_widget(self.submit)
+        self.ds = ds
+        self.submit.bind(on_press=self.do_submit)
+        
+    def do_submit(self, button):
+        name = self.name_input.text
+        self.ds.insert_item(name)
+        
 usedcat = {}
 
 
@@ -80,12 +97,13 @@ class POSFMApp(App):
         self.tv.toggle_node(button)
 
     def add_clicked(self, button):
-        popup = Popup(title='Test popup',
-                      content=Label(text='Hello world'),
+        popup = Popup(title='Add Item',
+                      content=AddItemLayout(self.DataStore),
                       size_hint=(None, None), size=(400, 400))
 
         popup.open()
-
+        self.populate_tree_view(self.tv)
+    
 
 
 if __name__ == '__main__':
