@@ -52,6 +52,17 @@ class DataStore():
         c.executemany('INSERT INTO categories VALUES (?)', categories)
         c.connection.commit()
 
+    def get_categories(self):
+        '''
+        Get all the available categories from the database
+        '''
+
+        c = self.c
+        c.execute('SELECT category FROM categories''')
+        categories = c.fetchall()
+        categories = [str(cat[0]) for cat in categories]
+        return categories
+
     def insert_item(self, name):
         '''
         Insert an item into the database.
